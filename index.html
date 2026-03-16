@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CU AI Campus Assistant</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* ---------------- GENERAL ---------------- */
+
+*{box-sizing:border-box}
+
+body{
+font-family:'Inter',sans-serif;
+margin:0;
+display:flex;
+background:#f0f4f8;
+color:#1e293b;
+}
+
+/* ---------------- SIDEBAR ---------------- */
+
+.sidebar{
+width:260px;
+background:linear-gradient(180deg,#0c1524,#162033,#1a2740);
+color:white;
+padding:28px 20px;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+.sidebar-logo{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:30px;
+}
+
+.sidebar img{
+width:120px;
+border-radius:50px;
+}
+
+.sidebar span{
+font-weight:700;
+font-size:15px;
+}
+
+.sidebar ul{
+padding:0;
+margin:0;
+}
+
+.sidebar li{
+list-style:none;
+padding:12px 14px;
+border-radius:10px;
+cursor:pointer;
+font-size:14px;
+margin-bottom:6px;
+color:#94a3b8;
+}
+
+.sidebar li:hover{
+background:rgba(34,197,94,0.15);
+color:#4ade80;
+}
+
+.sidebar li.active{
+background:rgba(34,197,94,0.2);
+color:#4ade80;
+}
+
+.sidebar-footer{
+margin-top:auto;
+font-size:12px;
+opacity:.4;
+text-align:center;
+}
+
+/* ---------------- MAIN ---------------- */
+
+.main{
+flex:1;
+}
+
+/* ---------------- HERO ---------------- */
+
+.hero{
+height:260px;
+background-image:url("campus.jpg");
+background-size:cover;
+background-position:center;
+display:flex;
+align-items:center;
+padding-left:40px;
+color:white;
+position:relative;
+}
+
+.hero::after{
+content:"";
+position:absolute;
+top:0;
+bottom:0;
+left:0;
+right:0;
+background:rgba(0,0,0,0.55);
+}
+
+.hero-content{
+position:relative;
+z-index:2;
+}
+
+.hero h1{
+font-size:38px;
+margin:0;
+}
+
+.hero p{
+opacity:.8;
+}
+
+/* ---------------- STATS ---------------- */
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+padding:25px;
+margin-top:-40px;
+}
+
+.stat{
+background:white;
+padding:25px;
+border-radius:14px;
+text-align:center;
+box-shadow:0 8px 25px rgba(0,0,0,0.08);
+}
+
+.stat h2{
+margin:0;
+color:#22c55e;
+}
+
+/* ---------------- CARDS ---------------- */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:16px;
+box-shadow:0 6px 20px rgba(0,0,0,0.08);
+}
+
+.card h3{
+margin-top:0;
+}
+
+/* ---------------- CHAT ---------------- */
+
+.chatbox{
+height:260px;
+overflow-y:auto;
+background:#f8fafc;
+border-radius:10px;
+padding:10px;
+margin-bottom:10px;
+}
+
+.message{
+margin:8px 0;
+}
+
+.user{text-align:right}
+.ai{text-align:left}
+
+.bubble{
+display:inline-block;
+padding:10px 14px;
+border-radius:14px;
+max-width:75%;
+font-size:14px;
+}
+
+.user .bubble{
+background:#22c55e;
+color:white;
+}
+
+.ai .bubble{
+background:#e2e8f0;
+}
+
+/* ---------------- INPUT ---------------- */
+
+input{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid #cbd5e1;
+margin-bottom:8px;
+}
+
+/* ---------------- BUTTON ---------------- */
+
+button{
+padding:10px 16px;
+border:none;
+border-radius:8px;
+background:linear-gradient(135deg,#22c55e,#16a34a);
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+/* ---------------- NAV BUTTONS ---------------- */
+
+.nav-buttons{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-bottom:10px;
+}
+
+.btn-secondary{
+background:#f1f5f9;
+color:#1e293b;
+}
+
+/* ---------------- FACILITIES ---------------- */
+
+.facilities{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.facility{
+text-align:center;
+border-radius:10px;
+overflow:hidden;
+border:1px solid #e2e8f0;
+}
+
+.facility img{
+width:100%;
+height:80px;
+object-fit:cover;
+}
+
+.facility p{
+font-size:12px;
+margin:6px 0;
+}
+
+/* ---------------- EVENTS ---------------- */
+
+.events{
+padding:20px;
+}
+
+.event{
+background:white;
+padding:15px;
+border-radius:12px;
+margin-bottom:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="sidebar-logo">
+<img src="images.png">
+<span>Chandigarh<br>University</span>
+</div>
+
+<ul>
+<li class="active">Dashboard</li>
+<li>Academics</li>
+<li>Hostel</li>
+<li>Library</li>
+<li>Placements</li>
+<li>Events</li>
+</ul>
+
+<div class="sidebar-footer">
+CU AI Campus Assistant v2.0
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<!-- HERO -->
+
+<div class="hero">
+<div class="hero-content">
+<h1>CU AI Campus Assistant</h1>
+<p>Your intelligent campus navigation and AI help system.</p>
+</div>
+</div>
+
+<!-- STATS -->
+
+<div class="stats">
+<div class="stat"><h2>25,000+</h2><p>Students</p></div>
+<div class="stat"><h2>500+</h2><p>Faculty</p></div>
+<div class="stat"><h2>100+</h2><p>Labs</p></div>
+</div>
+
+<!-- CARDS -->
+
+<div class="cards">
+
+<!-- AI CHAT -->
+
+<div class="card">
+
+<h3>🤖 Campus Chat</h3>
+
+<div id="chatbox" class="chatbox"></div>
+
+<div style="display:flex;gap:6px">
+<input id="userInput" placeholder="Ask anything about campus...">
+<button onclick="sendMessage()">Send</button>
+<button onclick="voice()">🎤</button>
+</div>
+
+</div>
+
+<!-- LOST & FOUND -->
+
+<div class="card">
+
+<h3>🎒 Lost & Found</h3>
+
+<input id="item" placeholder="What did you lose?">
+<input id="place" placeholder="Where did you last see it?">
+
+<button onclick="reportLost()">Report Lost Item</button>
+
+<ul id="lostList"></ul>
+
+</div>
+
+<!-- NAVIGATION -->
+
+<div class="card">
+
+<h3>📍 Campus Map</h3>
+
+<div class="nav-buttons">
+<button class="btn-secondary" onclick="navigate('Library Chandigarh University Uttar Pradesh Campus')">Library</button>
+<button class="btn-secondary" onclick="navigate('Hostel Chandigarh University Uttar Pradesh Campus')">Hostel</button>
+<button class="btn-secondary" onclick="navigate('Cafeteria Chandigarh University Uttar Pradesh Campus')">Cafeteria</button>
+</div>
+
+<div class="facilities">
+
+<div class="facility">
+<img src="library.jpg">
+<p>Library</p>
+</div>
+
+<div class="facility">
+<img src="cafeteria.jpg">
+<p>Cafeteria</p>
+</div>
+
+<div class="facility">
+<img src="admin.jpg">
+<p>Admin</p>
+</div>
+
+<div class="facility">
+<img src="hostel.jpg">
+<p>Hostel</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- EVENTS -->
+
+<div class="events">
+
+<h2>Upcoming Events</h2>
+
+<div class="event">AI Hackathon</div>
+<div class="event">Tech Talk</div>
+<div class="event">Placement Drive</div>
+
+</div>
+
+</div>
+
+<script>
+
+const API_KEY="AIzaSyAj--ClGaD-HgzZ66YsvpjVLcCv3PjwyGw";                                                        
+
+/* ADD MESSAGE */
+
+function addMessage(text,type){
+
+let chat=document.getElementById("chatbox");
+
+let div=document.createElement("div");
+
+div.className="message "+type;
+
+div.innerHTML=`<span class="bubble">${text}</span>`;
+
+chat.appendChild(div);
+
+chat.scrollTop=chat.scrollHeight;
+
+}
+
+/* SEND MESSAGE */
+
+async function sendMessage(){
+
+let input=document.getElementById("userInput");
+let message=input.value.trim();
+
+if(!message) return;
+
+addMessage(message,"user");
+
+input.value="";
+
+addMessage("Thinking...","ai");
+
+try{
+
+const response=await fetch(
+`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,                                                   
+{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+contents:[
+{
+parts:[
+{
+text:"You are an AI assistant for Chandigarh University Uttar Pradesh Campus helping students.\nQuestion:"+message
+}
+]
+}
+]
+})
+}
+);
+
+const data=await response.json();
+
+console.log(data);
+
+let reply="AI could not respond.";
+
+if(data.candidates && data.candidates.length>0){
+reply=data.candidates[0].content.parts[0].text;
+}
+
+if(data.error){
+reply="API Error: "+data.error.message;
+}
+
+document.querySelector(".ai:last-child .bubble").innerText=reply;
+
+}catch(err){
+
+document.querySelector(".ai:last-child .bubble").innerText="Connection error.";
+
+}
+
+}
+
+/* ENTER KEY */
+
+document.getElementById("userInput").addEventListener("keydown",function(e){
+if(e.key==="Enter") sendMessage();
+});
+
+/* VOICE */
+
+function voice(){
+
+const recognition=new(window.SpeechRecognition||window.webkitSpeechRecognition)();
+
+recognition.onresult=function(e){
+document.getElementById("userInput").value=e.results[0][0].transcript;
+sendMessage();
+};
+
+recognition.start();
+
+}
+
+/* NAVIGATION */
+
+function navigate(place){
+window.open(`https://www.google.com/maps/dir/?api=1&destination=${place}`);
+}
+
+/* LOST FOUND */
+
+function reportLost(){
+
+let item=document.getElementById("item").value;
+let place=document.getElementById("place").value;
+
+if(!item||!place) return;
+
+let lost=JSON.parse(localStorage.getItem("lost"))||[];
+
+lost.push(item+" lost at "+place);
+
+localStorage.setItem("lost",JSON.stringify(lost));
+
+displayLost();
+
+}
+
+function displayLost(){
+
+let lost=JSON.parse(localStorage.getItem("lost"))||[];
+
+let list=document.getElementById("lostList");
+
+list.innerHTML="";
+
+lost.forEach(x=>{
+let li=document.createElement("li");
+li.innerText=x;
+list.appendChild(li);
+});
+
+}
+
+displayLost();
+
+/* INITIAL AI MESSAGE */
+
+addMessage("Hello! I am the CU AI Campus Assistant. Ask me about library, hostel, placements or campus facilities.","ai");
+
+</script>
+
+</body>
+</html>
